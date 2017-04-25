@@ -4,7 +4,7 @@
 ldjt81a.exe is newest firmware for 64xx series (as far as I can find).
 
 From FTP listing:
-
+<pre>
 ldjt67a.exe 683785 03-01-95 Flash BIOS update 64xx v67
 
 ldjt70a.exe 683887 05-06-95 Flash BIOS update 64xx v70
@@ -40,7 +40,7 @@ vppfl65a.exe 683871 01-20-95 Flash BIOS update 64xx v65w
 vppnp10.exe 82452 03-08-95 64xx Plug & Play Utility
 
 vpqna.zip 12967 03-13-93 ValuePoint Common Q&A Excellent Info!!
-
+</pre>
 
 
 ### References
