@@ -1,0 +1,105 @@
+ **********************************************************************
+ *                    IMPORTANT INFORMATION                           *
+ *                                                                    *
+ * PLEASE PRINT OUT THESE INSTRUCTIONS OR WRITE THEM DOWN BEFORE      *
+ * STARTING THIS FLASH UPDATE UTILITY.                                *
+ *                                                                    *
+ *  WARNING : DO NOT RUN THE (updtflsh.exe) PROGRAM AS A STAND ALONE  *
+ *  WARNING : PROGRAM THIS ACTION WILL RUIN THE SYSTEM BIOS ON YOUR   *
+ *  WARNING : PLANAR AND REQUIRE YOU TO HAVE THE PLANAR REMOVED AND   *
+ *  WARNING : REPLACED.                                               *
+ *  WARNING :                                                         *
+ *  WARNING : YOU MUST PLACE THIS DISKETTE IN YOUR SYSTEM FIRST AND   *
+ *  WARNING : PERFORM WHAT IS KNOWN AS A COLD BOOT, IN OTHER WORDS    *
+ *  WARNING : YOU MUST SHUT DOWN ANY RUNNING PROGRAMS AND POWER OFF   *
+ *  WARNING : YOUR SYSTEM AND THEN POWER IT BACK ON (5) SECONDS LATER.*
+ *  WARNING :                                                         *
+ *  WARNING : DO NOT DO A (WARM BOOT), IN OTHER WORDS PERFORM A       *
+ *  WARNING : (CTRL + ALT + DEL) BY PRESSING THE (3) KEYS ON THE      *
+ *  WARNING : KEYBOARD MARKED AS (CTRL)(ALT)(DEL) AT THE SAME TIME.   *
+ *  WARNING :                                                         *
+ *  WARNING : DO NOT TURN THE COMPUTER OFF DURING AN INSTALLATION     *
+ *  WARNING : PROCEDURE.  THIS TOO WILL PERMANENTLY DAMAGE THE SYSTEM *
+ *  WARNING : BOARD AND REQUIRE YOU TO HAVE THE PLANAR REMOVED AND    *
+ *  WARNING : REPLACED.                                               *
+ *  WARNING :                                                         *
+ *  WARNING : ONCE A SELECTION HAS BEEN MADE FROM THE MENU AND        *
+ *  WARNING : ENTERED, YOU WILL FIND THAT THE KEYBOARD WILL NO LONGER *
+ *  WARNING : EXCEPT INPUT.  DO NOT BE ALARMED BY THIS, THIS WAS DONE *
+ *  WARNING : TO FORCE YOU TO POWER OFF THE COMPUTER AND TO POWER IT  *
+ *  WARNING : BACK ON AGAIN FOR THE CHANGES TO TAKE EFFECT.           *
+ *                                                                    *
+ *  STEPS...                                                          *
+ *                                                                    *
+ *  1 : TO USE THIS DISKETTE, INSERT THE DISKETTE IN DRIVE A: AND     *
+ *      TURN ON THE COMPUTER.                                         *
+ *                                                                    *
+ *  2 : SELECT YOUR COUNTRY FROM THE MAIN MENU AND PRESS ENTER.       *
+ *                                                                    *
+ *  3 : WHEN THE PROGRAM INSTALLS SUCCESSFULLY, A <00> CODE IS        *
+ *      DISPLAYED IN THE LOWER LEFT SECTION OF THE SCREEN.            *
+ *                                                                    *
+ *  NOTES :                                                           *
+ *          - IF A CODE OTHER THAN <00> APPEARS, PLEASE SEE THE       *
+ *            SECTION TITLED NUMERIC CODES FOR AN EXPLAINATION.       *
+ *                                                                    *
+ *          - WHEN INSTALLING THIS PROGRAM OVER A LAN...              *
+ *            ..  AND A <02> CODE OCCURS AFTER INSTALLATION.          *
+ *            ..  TURN THE COMPUTER OFF.                              *
+ *            ..  TURN THE COMPUTER ON AGAIN AND FOLLOW THE           *
+ *                INSTALLATION PROCEDURE A SECOND TIME TO COMPLETE    *
+ *                THE INSTALLATION.                                   *
+ *                                                                    *
+ *  4 : WHEN THE PROGRAM INSTALLS SUCCESSFULLY, A <00> CODE IS        *
+ *      DISPLAYED IN THE LOWER LEFT SECTION OF THE SCREEN.            *
+ *                                                                    *
+ **********************************************************************
+ *                                                                    *
+ *  NUMERIC CODES :                                                   *
+ *                                                                    *
+ *  00 - PROGRAM INSTALLED SUCCESSFULLY.                              *
+ *                                                                    *
+ *  01 - OPERATOR SELECTED TO QUIT AT THE MAIN MENU, OR TYPED AN      *
+ *       UNKNOWN COMMAND PARAMETER.                                   *
+ *                                                                    *
+ *  02 - UNSUPPORTED COMPUTER MODEL OR FLASH WRITE PROTECTED          *
+ *       (FIRST INSTALLATION ATTEMPT ON LAN).                         *
+ *                                                                    *
+ *  03 - UNKNOWN POST/BIOS FLASH ID.                                  *
+ *                                                                    *
+ *  04 - POST/BIOS UPDATE UTILITY DISKETTE IS DEFECTIVE.              *
+ *                                                                    *
+ *  05 - POST/BIOS UPDATE UTILITY DISKETTE IS DEFECTIVE.              *
+ *                                                                    *
+ *  06 - POST/BIOS FLASH ON THIS SYSTEM IS ALREADY UPDATED.           *
+ *                                                                    *
+ *  07 - POST/BIOS UPDATE UTILITY DISKETTE IS DEFECTIVE.              *
+ *                                                                    *
+ **********************************************************************
+Abstract of the Defect Solved...
+---------------------------------------------------------------
+Adding an updated version of the Readme.ibm file to diskette.
+Adding or Updating a Changes.new file to the diskette.
+
+Level LDJT79A
+-------------
+
+63972   Fixed large hardfile reporting size in setup/configuration utility
+
+66234  Fix for Win95 and WinNT to recognize > 64 Megs installed.
+
+69163  Maxtor 540 Hardfiles show 178x errors
+
+Level LDJT80A
+-------------
+
+hlpct_6566  Fixed date problem when system is booted during a window
+            of 7:00 pm-7:05pm.  This was due to millenium (year 2000 fix)
+            done in Level LDJT71A.
+
+
+Level LDJT81A
+-------------
+125075      The Belgian-Dutch and Swiss-German language files
+            were missing from builds since level LDJT71A.
+

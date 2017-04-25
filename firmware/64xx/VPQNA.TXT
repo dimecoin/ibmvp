@@ -1,0 +1,937 @@
+
+
+The IBM PS/ValuePoint
+Guide to Trouble Shooting
+
+
+
+Covers the following models
+6384-Cxx
+6384-Fxx
+6384-Mxx
+6384-Wxx
+6312-001
+6314-001
+6319-001
+
+
+
+
+
+Version 1.13a
+(will be continually updated and revised)
+3/10/93
+
+
+
+
+Written by: Ernie Cooper
+Edited by wink at dayvm2
+
+Table of Contents
+
+
+
+            Desciption                                          Pages
+
+Section I     System Board / ROM                                 2, 3
+Section II    Video                                              4-6
+Section III   OS/2 Preload                                       7, 8
+Section IV    Diskette Drives / Tape Drives                      9
+Section V     Hard Drives                                        10
+Section VI    SCSI                                               11, 12
+Section VII   Memory                                             13, 14
+Section VIII  Other                                              15-18
+Appendix I    Trouble Shooting Guidelines                           19
+Appendix II   General PS/ValuePoint System Board Information        20
+
+
+
+
+
+
+
+Introduction
+
+This document was created to assist IBM employees in solving problems
+with the IBM Model 6384 PS/ValuePoint computer.  The information in this
+manual will hopefully be a resource which will help IBM in giving
+quality support to its customers.
+
+The last page of this manual contains a summary of common system board
+configuration questions.  This information was meant to be a faxable
+document to customers.
+
+This manual was compiled by gathering information from numerous manuals,
+documents, and people.  Any additions, suggestions, or corrections
+brought to the attention of the author would be very much appreciated.
+
+This publication could contain technical inaccuracies or typographical
+errors.  Changes will periodically be made to the information herein;
+these changes will be incorporated in new editions of this publication.
+
+
+
+Section I
+System Board / ROM
+
+
+1.  Definition of Local Bus
+
+The I/O channel, where all I/O devices are located (i.e. video cards,
+hard drive controllers, and serial adapters) operates at a given speed.
+On most PC systems, including the PS/ValuePoint, the I/O channel runs at
+8 MHz. This means that I/O devices, such as the built-in video
+controller, runs at the speed of 8 MHz. The processor, on the other
+hand, runs at a much higher speed.  For example the PS/ValuePoint
+processor on the 6384-F00 model runs at 25 MHz. The ValuePoint's I/O
+channel is the ISA or AT-BUS architecture.
+
+The local bus technology incorporates two different types of I/O
+channels.  The system board has the standard 8 MHz I/O slots that you
+see on most ISA systems.  They also have "Local Bus" I/O slots.  The
+local bus slots run at the speed of the processor, not 8 MHz. This
+technology obviously increases the throughput of the machine.  There are
+special local bus adapters that take advantage of the local bus
+technology.  The two most common adapters for local bus slots are video
+and hard drive controllers.
+
+There are no IBM systems that incorporate the "Local Bus" technology (as
+of the book).
+
+2.  ROM BASIC on the ValuePoint system.
+
+IBM computers have a certain amount of the BASIC programming language
+built into the computer's ROM BIOS.  On most PS/2 systems, the size of
+BASIC on the ROM chip is 32 Kb.  On the PS/ValuePoint systems, the ROM
+BASIC is 5 Kb in size.
+
+3.  With EMM386.EXE, you can include the address ranges.... (not official)
+
+ C000-C7FF    (Free space that EMM386.EXE thinks is taken up by a video adapter)
+ F725-FBFF    (ROM BASIC) * Note:QEMM includes F900-FDFF, so try that range.
+ EA00-F1FF    (POST)
+ B000-B7FF    (Mono video)* Note:Some high-res. video modes might use this
+                            address range.  Windows 3.1 uses this range.
+ E000-E7FF    (Video ROM)* Note:Only include if you install an OEM video
+                                 card to override on board video
+
+4.  The serial port UART chip is a 16450B.  The maximum speed of the serial port
+ is 19,200 BAUD.
+
+5.  DMA information - (not official)
+
+According to the diagnostic program Checkit, there are eight DMA
+channels, numbered 0-7.  DMA 2 is used by the floppy drive.  DMA 4 is
+used by the cascade.
+
+6.  The following are the model and sub model bytes for the ValuePoint machines.
+..
+
+                     Model  Sub model
+        386SLC         F8    49
+        486SX          F8    4A
+        486DX & DX2    F8    4B
+
+
+System Board/ROM
+
+7.  The following is a list of the Interrupt assignments on the PS/ValuePoints.
+
+        IRQ 0                Timer
+        IRQ 1                Keyboard
+        IRQ 2                Cascade Interrupt Requests (Possibly Video)
+                IRQ 8        Real-Time Clock
+                IRQ 9        Redirect Cascade ,Video
+                IRQ 10        Available
+                IRQ 11        Available
+                IRQ 12        Auxiliary Device (Mouse)
+                IRQ 13        Math Coprocessor Exception
+                IRQ 14        Fixed Disk
+                IRQ 15        Available
+        IRQ 3                Serial Alternate
+        IRQ 4                Serial Primary
+        IRQ 5                Available
+        IRQ 6                Diskette
+        IRQ 7                Parallel Port
+
+8.  How do you run setup on the ValuePoint systems?
+
+Press the F1 key during POST (boot-up) as the system is counting memory.
+There is no reference or starter diskette for the ValuePoint.
+
+9.  Processor upgrade information.
+
+The 25/50 DX2 processor upgrade goes into the math coprocessor socket.
+The 33/66 DX2 processor upgrade goes into the socket where the 486DX/33 processo
+r is.
+
+10.  The ValuePoint system has a beeper, NOT a speaker.
+
+11.  There are five 16-bit expansion slots, 4 full length slots and 1
+     half length slot.
+
+12.  Adding serial (COM) devices on the ValuePoint.
+
+You can have up to four COM ports on the PS/ValuePoint.  Setup will only
+show two COM ports in the configuration screen, even if there are three
+or four COM devices.
+
+13.  The battery on the ValuePoints is a lithium battery.
+
+14.  Power-on password information
+
+You can enable a password on the ValuePoints through the configuration
+utility built on the ROM chip.  Since anyone could make a password, some
+customers may want the computer to not have the password setting
+capability.  You can accomplish this by removing the power-on password
+jumper from the system board.
+
+15.  The DMA controller is a 24 bit controller.
+
+
+Section II
+Video
+
+
+1.  Fastbios.sys
+
+Fastbios.sys is a utility that comes with the 486 ValuePoint machines.
+The driver is supposed to shadow the system's video BIOS.  Since the
+video BIOS is already shadowed in RAM, there is no need to install this
+driver.  The driver will not work on the ValuePoint systems.  The driver
+was shipped by the video chip manufacturer in case a system did not
+already shadow the video BIOS.
+
+2.  OS/2 Preload flicker problem
+
+The OS/2 2.00.1 preload video driver runs at 43.5 Hz Interlaced in SVGA
+(1024x786) mode.  There is a video driver now available that runs at 70
+Hz.  This driver also allows the customer to run in other modes such as
+800x600.  The driver is available on the BBS, see the section
+labeledOTHER for details.
+
+3.  FST stands for Flatter Squarer Tube.  The 6319 is a FST monitor.
+
+4. MFI stands for Mainframe Interactive.  The ValuePoints support MFI
+    modes 2,3, and 4.
+
+5.  Monitor support questions...
+
+PS/ValuePoint supported monitors - 6312, 6314, 6319.  Any PS/2
+                                   monitor except the 8506, 8508, 8517, and
+                                   the 95xx series.
+Will ValuePoint monitors work on Premier line -     Yes
+
+As a rule of thumb, most VGA or SVGA compatible monitors will work on
+the ValuePoints.
+
+6.  CLMODE & VMODE
+
+To set your computer in the right high resolution mode, you need to
+configure either the CLMODE (for 386SLC) or the VMODE (for 486) program.
+This is necessary to run your system in a high resolution mode (i.e.
+800x600 or 1024x768).  Below are the "best" settings for each mode with
+the PS/ValuePoint monitors in 1024x768 mode.
+
+        6312 in 1024x768 -     CLMODE 3+ m5+  or  VMODE 65m
+
+        6314,6319 in 1024x768 -    CLMODE 3+ m7+ or VMODE 72m
+
+Important:  If you are going to run Windows high resolution drivers, you
+            need to run CLMODE or VMODE before you run Windows.
+
+7.  The PS/ValuePoint computers use DRAM video memory, not VRAM video memory.
+
+    VRAM is generally faster but more expensive than DRAM.
+
+8.  The NEC 3D monitor does not seem to work on the ValuePoint machines.
+
+
+9.  Video chipset information...
+
+    386SLC -    Cirrus Logic     CL-GD5422 (Compatible with Paradise)
+    486 -        Tseng Labs     ET4000
+
+10.  Video feature connector information.
+
+    1.  The 386SLC, 486DX and 486DX2 feature connectors are pinned properly.
+    2.  The 486SX connector is pinned to an Asian standard.
+        You will need an interposer.
+
+The feature connector was built for connectivity to OEM multimedia
+solutions that use a feature connector.  The connector has not been
+tested by IBM, and there are no IBM options that utilize the feature
+connector.
+
+11.  There is 1MB of Video DRAM on all ValuePoint models.
+
+12.  Video accelerator card information...
+
+A video accelerator card is a video card that is designed in such a way
+to increase video performance.  The video built on the system board is
+not a video accelerator.
+
+13.  The following are the high resolution video modes you can use on
+     the PS/ValuePoint systems...
+
+    640x480 (16 colors)                at 60 & 72 Hz
+    640x480 (256 colors)               at 60 & 72 Hz
+    640x480 (up to 16 million colors)  at 60 Hz         Cxx model only
+    800x600 (256 colors)               at 56, 60, & 72 Hz
+    800x600 (up to 64K colors)         at 56 & 60 Hz    Cxx model only
+    1024x768 (256 colors)              at 60 & 70 Hz
+    1204x768 (256 colors)              at 87 Hz (interlaced)
+
+14.   Monitor size information...
+
+CRT (Cathode Ray Tube) manufacturers designate their tubes as 14 inch,
+15 inch, etc.  The 15 inches they are referring to is the diagonal line
+from one top corner of the glass to the opposite bottom corner.  When
+the CRT is installed in a product such as the 6319, you loose some of
+the glass since it is covered by the bezel.  If you measure the diagonal
+it will be less than 15 inches.  We are following the industry by
+quoting 15 inch nominal.
+
+15.  Disabling the video on the ValuePoint systems.
+
+To install a video card in the ValuePoint, you must disable the on board
+video.  There are jumpers to accomplish this on the 486 ValuePoints.
+
+    425SX model  -  Move JP10 from 1-2 to 2-3.  Remove JP1
+    433DX & DX2 model - Move JP10 from 1-2 to 2-3.  Remove JP17
+    325T model - Some systems have a jumper JP17, others do not have a video
+                 disable jumper.
+
+
+16.  All ValuePoint monitors meet the VLMF emissions standards.
+
+17.  STB video accelerator card information
+
+    -    The STB adapter is called the PowerGraph X-24 adapter
+    -    It is a 16-bit adapter card.
+    -    STB's phone number is 214-234-8750
+    -    If you are using EMM386.EXE, include the address range E000-E7FF
+    -    Supports up to 16.7 million colors at 640x480 resolution
+    -    Supports up to 65,536 colors at 800x600 resolution
+    -    The video is roughly 5 times as fast as standard SVGA
+    -    Refer to pg. 1-3 of the STB manual if you are having video problems
+         and you have a COM4 on the machine.
+
+    -  The STB card is faster due to a video coprocessor that performs
+       functions the processor normally does.  This includes a hardware cursor,
+       line drawing, rectangle filling, high-speed image transfers, bit block
+       transfers, support for no-wait video write operations, color expansion,
+       and first-in-first-out (FIFO) data cache.
+
+18.  OS/2 Video Driver Problem
+
+There is a problem that may arise with the new 486 SVGA Video Drivers
+for the ValuePoint using OS/2 2.00.1.  OS/2, with these drivers
+installed, will experience video problems when changing video modes such
+as in Communications Manager and OS/2 full screen modes.
+
+The problem is due to a change in the vendor of a video frequency
+controller chip on the system board.  This chip is located just left of
+the TSENG video chip on the system board.  The older chip is labeled
+"ICS" and the newer chip is labeled "CHRONTEL".  The OS/2 drivers are
+written to handle the ICS chip but will not work correctly with the
+CHRONTEL chip.  There is a new OS/2 video driver that will solve this
+problem.
+
+
+Section III
+OS/2 Preload
+
+
+
+2. There is a 0 MB partition on the ValuePoint computers.  It is Type
+   FE.  You can delete it with FDISKPM.  Type FE partition is only required
+   for European systems.
+
+3.  DOS fax software does not seem to work under OS/2 2.00.1.
+
+          FaxWorks, made by SoftNet, is an OS/2 fax program that does work.
+
+4.  To put the OS/2 desktop in SVGA mode, you need to...
+
+    1.    Click on the Welcome folder icon
+    2.    Click on the Configuration Tools icon
+    3.    Click on the Configure icon
+    4.    Click on the box to the left of the Primary Display, then click on OK.
+    5.    Choose SVGA as your display.
+
+OS/2 Preload
+
+5.  The OS/2 Support Matrix
+
+    ValuePoint    1.30.1        1.30.2         2.0        2.0         2.00.1
+                  SE + EE       SE + EE              Service PAK
+
+    325T        1,2,3           1,2,3           1          1           No
+    425SX        1,3            1,3            Yes        Yes        Preload
+    433DX        1,3            1,3            Yes        Yes        Preload
+    466DX/2      1,3            1,3            Yes        Yes        Preload
+
+    Notes
+
+      1 -    VGA mode only
+      2 -    Requires "F-Disk error during boot" fix - Defect 57012
+      3 -    Requires "Date/Time 162/163 error" fix - Defect 57146
+
+6.  How to delete the OS/2 preload off the ValuePoint computer.
+
+    1.  Make Utility Diskettes
+
+    Obtain three 2M blank diskettes.  Locate the "Configuration Tools"
+    icon in the Welcome Folder.  Open the Configuration Tools Folder.
+    Locate the "Create Utility Diskettes" icon inside of the
+    Configuration Tools icon view window.  Open and create the Utilities
+    Diskettes.  The "Utilities Diskettes" window will appear.  Select
+    the drive where the Utility Diskettes will be created.  Type "C" or
+    place the mouse pointer on the "C" or place the mouse pointer on the
+    "Create" and push the button and click once.  Follow the
+    instructions on the screen to prepare the Utility Diskettes.  Label
+    the diskettes 1,2, and 3.
+
+    2. Delete OS/2 Preload
+
+    Restart the system from the Utility Diskette (Place Utility Diskette
+    #1 into Drive A, press Cntr-Alt- Del).  Place Diskette #2 and #3
+    into the drive when instructed and press enter.  A command prompt
+    should appear.  Place diskette containing OSDELETE.EXE into drive A.
+    Type OSDELETE and hit enter.  When prompted "DO YOU WISH TO
+    CONTINUE?" press "Y".  When prompted "DO YOU WISH TO STOP NOW?"
+    press "N".  Type the system's serial number and press enter.
+    OSDELETE will remove all files in the OS2 subdirectories.  Record
+    the "VERIFICATION NUMBER" (Must have to get free DOS 5.0).  Press
+    the enter key twice to return the OS/2 command prompt.
+
+7.  There is a patch for AutoCad to work under OS/2.
+
+    To get the file, you can contact AutoDesk or get the file OS2PCH.ZIP
+    from the AutoCad forum nder Compuserve.
+
+
+Section IV
+Diskette Drives / Tape Drives
+
+
+1.  Common diskette problems -
+
+    - If the 'B' drive has a terminating resistor (T-Res) on it, you need
+      to take it off.
+    - The 'B' drive select should be on "1", the twist in the 'A' drive
+       cable takes care of the drive select.
+    - If a customer is having a problem with our 5.25 drive, make sure
+      the customer knows to   push the drive button in to lock the diskette
+        in the drive.
+
+2.  OEM tape backup information.... (not official)
+
+    Mountain File Safe 8000 will work under DOS.  It will not work under OS/2.
+
+    Colorado Tape Jumbo 250 backup will work under DOS.  It will not
+    work under OS/2, but they are working on drivers planned to be
+    available by March 1993.
+
+    Tecmar QT60I will work under DOS and OS/2.
+
+3.  General diskette drive information...
+
+    -    ValuePoints only support two diskette drives.
+    -    The only 'B' drive option is a 1.2mb 5.25 drive.
+    -    2.88 drive will not work.
+    -    The drives are not Media-Sensing.
+    -    You cannot make the 5.25 drive a bootable drive, or the 'A' drive.
+
+4.  The floppy drive controller cannot be disabled.
+
+5. If you are going to use the 2.0 gigabyte SCSI drive, you need to
+    run the following Systos package.
+
+    DOS machines    -    Systos 1.34
+    OS/2 machines    -    Systos 1.35
+
+
+Section V
+Hard Drives
+
+
+1.  What type of hard drives can you install in the ValuePoints systems?
+
+    The standard hard drive interface is IDE.  You can install a SCSI
+    adapter to run a SCSI hard drive.
+
+2.  The IDE drives in the ValuePoints conform to the ANSICAM standard.
+
+    If a customer purchases an OEM IDE drive, it needs to be an ANSICAM
+    drive.  If an OEM drive does not work as a slave drive, that is a
+    good tip that it is not an ANSICAM drive.
+
+3.  If you install a second IDE drive, you need to set the Master/Slave jumper a
+ccordingly.
+
+    One drive needs to be the Master (C drive) and the other needs to be
+    the Slave (D drive).
+
+4.  How do you low-level format a hard drive?
+
+    1.    Boot the advanced diagnostics diskette
+    2.    Select system checkout
+    3.    Select "Y" if the option list is correct
+    4.    Select "Run Tests One Time"
+    5.    Select Test #17
+    6.    Select Format Menu
+    7.    Select either Conditional or Unconditional format
+
+5. The following is a list of the hard drive specs (heads,
+    cylinders, access time, etc).
+
+                   80MB            120MB              170MB            212MB
+
+Avg seek time      16ms             15ms              16ms             15ms
+Avg r/w time      18.5ms            15ms              18.5ms           15ms
+Data xfer rate    13.3Mbits/s     12Mbits/s          13.3Mbits/s    18.9Mbits/s
+ Media to buffer
+Avg latency       8.33ms            8.5ms             8.33ms           8.45ms
+Buffer            32KB              64KB              32KB             64KB
+Heads(logical)    10                 16                10              16
+Cylinders(log)    932                936               984             682
+Sectors/Track     17                 17                34              38
+
+6.  If you order a ValuePoint without a hard drive, the cable will be shipped in
+ the box, not in the system.
+
+7.  The ValuePoint IDE settings.
+                                      Primary(Master)        Secondary(Slave)
+
+    Pin Connector drives (Maxtor) - Second from Right           Far Right
+
+    Switch Block drives (IBM) -        1,2,3 on                  1,3 on
+                                        4 off                    2,4 off
+
+8.  IBM Hard Drives are measured in Million Bytes, not Mega Bytes.
+
+Section VI
+SCSI
+
+
+1.  SCSI options for the PS/ValuePoint.
+
+    INTERNAL OPTIONS    -    Internal 8-bit SCSI Kit (pn 04G6128)
+                             Internal 16-bit SCSI Kit (pn 32G4088)
+
+    Option            Part Number
+
+    80MB Fixed Disk         6451045
+    104MB Fixed Disk        6451241
+    160MB Fixed Disk        6451046
+    212MB Fixed Disk        6451242
+    320MB Fixed Disk*       6451234
+    400MB Fixed Disk*       6451235
+    1 GB  Fixed Disk*       6451052   16 bit adapter only
+    CD-ROM II Drive         6451104
+    Rewriteable Optical**   6451062
+    2.3 GB Tape Drive       6451121   16 bit adapter only
+    2.0 GB Tape Backup      55F9464   16 bit adapter only
+
+    * The holes on the drive do not line up in the 3.5 inch bays, so it
+      is not supported internally.
+
+    ** The Rewriteable drive is a 3.5 inch device, so it will not fit
+      correctly. We don't have an internal mount bracket for it.
+
+
+
+
+    EXTERNAL OPTIONS - External 8-bit SCSI Kit (pn 04G6129) (adpt. & ext cable)
+                       External 16-bit SCSI Cable Kit (pn 32G4089)
+                       6451042 (Option to Option Cable)
+                       04G6130 (External Cable for 8-bit internal kit)
+
+    Option            Part Number        Extra Parts Needed
+
+    80MB Fixed Disk        6451045            35100V0 (External Enclosure)
+    104MB Fixed Disk       6451241            35100V0
+    160MB Fixed Disk       6451046            35100V0
+    212MB Fixed Disk       6451242            35100V0
+    320MB Fixed Disk       6451234            35100V0
+    400MB Fixed Disk       6451235            35100V0
+    1GB FIXED DISK*        6451052            35100V0
+    CD-ROM II Drive        6451104            35100V0
+                            6451146 (Install Kit B)
+ Rewriteable Optical       6451062            35100V0
+ 2.3 GB Tape Drive*        3532023            31F4186
+ 2.0 GB Tape Drive*        55F9464            35100V0
+
+        * This option is only supported with the 16-bit SCSI adapter.
+
+
+
+
+2.  You can have up to two SCSI adapters in the ValuePoint system.
+
+3.  In order to have a SCSI drive a boot drive you need to make sure...
+
+    1.There is no IDE drive in the system (the IDE primary drive will
+      boot if you have a an IDE and a SCSI drive).
+
+    2.The SCSI ID has to be set to ID 6.
+
+4.  OS/2 and the SCSI adapter...
+
+    OS/2 may lockup with the IBM AT-Bus SCSI adapter.  The solution is
+    to have the SCSI adapter use an interrupt.  Jumpers W6 & W7 make the
+    adapter to use IRQ 3 & IRQ 5 respectively.
+
+5.  The 8-bit SCSI adapter information
+
+    The 8-bit SCSI adapter is a TMC-850IBM adapter, manufactured
+    exclusively for IBM by Future Domain.
+
+   The configuration of the SCSI adapter is set up at the factory as follows...
+
+        BIOS/Adapter Address:    CA00h (W1, W2 open)
+        Interrupt select:        Disabled
+        I/O Ports used:          None
+        Termination Power:       Enabled (W4)
+        Zero Wait State:         Disabled (W5)
+
+    If you set W6 enabled, the card will use at IRQ 3. If you set W7
+    enabled, the card will use IRQ 5.
+
+6.  The 16-bit SCSI adapter information
+
+    The 16-bit SCSI adapter is manufactured exclusively for IBM by
+    Future Domain.
+
+    The configuration of the SCSI adapter is set up at the factory as follows...
+
+        BIOS/Adapter Address:    CA00h
+        Interrupt select:        IRQ 5
+        I/O Ports used:          0140-014F
+        Termination Power:       Enabled
+
+
+
+Section VII
+Memory
+
+
+1.  Wait states on the ValuePoint
+
+    The ValuePoints uses 0-2 Wait States.  It uses 0 wait states if the
+    processor finds its information in the cache memory.  It uses 0-2
+    wait states if the processor needs to go to the RAM memory for data,
+    depending on where in memory the data is located.
+
+2.  Memory configurator...
+
+386SLC
+
+  1. Comes standard with 2 Mb memory soldered on the system board.
+  2. Has two empty SIMM sockets on the planar.
+  3. You can install the following memory SIMM sizes on the system board in any
+order or
+     combination...
+                1 Mb, 2 Mb, 4 Mb, 8 Mb
+
+    The memory is 72-pin IBM SIMMs (same memory as the PS/2 Model 35SX).
+    The speed of the SIMMs can be 70,80, or 85 ns.  The memory will run
+    at 85 ns on the system, regardless of the speed of the SIMM.
+
+            1 Mb SIMM(85ns)    -    6450603
+            2 Mb SIMM(85ns)    -    6450604
+            4 Mb SIMM(80ns)    -    87F9977
+            8 Mb SIMM(80ns)    -    6450129
+
+
+486
+
+    1.    There are eight SIMM sockets on the system board.
+    2.    Memory must be installed in sets of four.
+    3.    Each set of four must contain four 1 Mb SIMMs or four Mb SIMMs.
+
+     The memory is 30-pin Industry Standard SIMMs.  The memory runs at 80 ns.
+
+            1 Mb SIMM(80ns)    -    96F9290
+            4 Mb SIMM(80ns)    -    96F9291
+
+3.  My ValuePoint is not counting up all the memory I think it should because...
+
+    486 Models
+    The memory will count to 384 Kb less than the total memory
+    installed.  ROM shadowing uses 128Kb of memory, whether it is
+    enabled or disabled.  The other 256 Kb memory is not used by the
+    system, and cannot be recovered.
+
+    386SLC Model
+    The memory will count to 128 Kb less than the total memory
+    installed.  The 128 Kb is used for ROM shadowing.  When you disable
+    ROM shadowing, you WILL get the 128Kb back.
+
+
+Memory
+
+4.  Hardware Memory Cache
+
+    RAM memory on the ValuePoints is located on SIMM chips in sockets on
+    the system board.  It takes a certain amount of time for the
+    processor to retrieve information from the SIMM chips.  To speed up
+    a computer's performance, system boards incorporate memory cache.
+    Memory cache is high speed static RAM located either internally or
+    externally to the processor.  The 386SLC, 486SX, 486DX, and 486DX2
+    processors have 8kb of internal processor cache, called Level One
+    cache.  The Mxx and W52 models have 128 Kb of external, or Level Two
+    cache.  Level two cache is commonly known as L2 cache.  L2 cache
+    normally runs around 15 to 17ns.
+
+5. You can install up to 18 Mb of memory on the 386SLC, but the
+    system will only recognize 16 Mb.
+
+6.  The L2 Cache in the ValuePoints is not upgradeable.
+
+7. There is a patch for OS/2 to recognize more than 16 Mb. Contact
+    Defect Support for patch.
+
+8.  Why memory has to be installed in sets of FOUR on the 486 ValuePoints.
+
+    The memory SIMM is 8 bits wide.  There are four SIMMs in a bank.
+    Memory is addressed in 32 bit paths. 4X8=32.
+
+
+Section VIII
+OTHER
+
+
+1. The power supply is 145 Watts and you have a maximum of 10 Watts
+    per adapter slot for adapter cards.
+
+2.  Common power problems on the ValuePoints.
+
+    Some systems will not power on or power off because the cover is
+    not seated properly.
+
+    The switch on the back of the power supply needs to be set to
+    115V instead of the preset 230V.
+
+    If a system does not have a hard drive light or a power light,
+    check to see if the light cable is connected.
+
+4.  ValuePoint as a desktop unit.
+
+    IBM only officially supports the ValuePoint as a desktop unit.  The
+    ValuePoint has not been UL tested as a tower unit (on it's side).
+
+5. There is a patch to get a DCA Irma card to work on
+    PS/ValuePoints.  Contact DCA.
+
+6.  The ValuePoint systems will not work with Windows 3.1 32-bit disk access.
+
+7.  Sales advisor & Marketing glossy mistakes...
+
+    1.  The 120MB Tape Backup is not supported in the PS/ValuePoint systems.
+
+    2. Sales Advisor has numerous errors, including the memory
+       configurations on Pg.  C-9.
+
+8.  The ValuePoint systems are Novell certified.
+
+    ValuePoint as a server requires a Novell driver
+
+    Novell 2.2 -    you need PS2ISA.COM, found in directory 33 on the BBS
+    Novell 3.11 -    you need IDE386.EXE, found in directory 34 on the BBS
+
+9.  The default keyboard scan code is set for SCAN CODE 2.
+
+10.  Software packages that may have problems with the SLC
+    processor.  (not official)
+
+    1.  FoxPro
+    2.  PCMoss
+
+
+12.  We do not have any Mean Time Between Failure ratings for the
+    ValuePoint systems.
+
+
+
+13.  The following list are settings you can alter with the setup routine...
+
+    1.  BIOS Shadowing (enable or disable)
+    2.  Power on Password (enable or disable)
+    3.  Startup sequence (either smart or conventional)
+
+    Smart:If there is a non-bootable diskette in the A drive, it will
+          ignore the disk and boot to the hard drive.
+
+    Conventional:  If there is a non-bootable diskette in the A drive,
+                   it will prompt you to put in a bootable diskette.
+
+    4.  Serial Port (change COM ports or disable)
+        486 ValuePoint
+            Serial A        Address/IRQ        Serial B        Address/IRQ
+            COM1            3F8 (IRQ 4)        COM2            2F8 (IRQ 3)
+            COM3            3E8 (IRQ 4)        COM4            2E8 (IRQ 3)
+        386SLC ValuePoint
+            Serial A        Address/IRQ
+            COM1            3F8 (IRQ 4)
+            COM2            2F8 (IRQ 3)
+    5.  Parallel Port (change address or disable)
+        All ValuePoint Systems
+            Port           Address/IRQ
+            Parallel_1    3BC    (IRQ 7)
+            Parallel_2    378    (IRQ 7)
+            Parallel_3    278    (IRQ 7)
+    6.  Date and Time
+
+14.  Diskettes that are on the IBM BBS.  The phone number is 404-835-6600.
+
+ Advanced Diagnostics - VPADV100.DSK    (This file is only on the TA BBS.  Only
+                                         dealers have access to the TA BBS.)
+    386SLC Drivers - VP386SVG.DSK
+                     WINDR386.DSK
+    486 Drivers - VP486SVG.DSK
+                  WINDR486.DSK
+    Utilities Diskettes - PREINST1.DSK
+                          PREINST2.DSK
+                          PREINST3.DSK
+    OS/2 Video Driver -   OS2DRVP.DSK
+
+ Note:You will need the file LDF.COM to decompress these files to diskettes.
+
+15.  ValuePoint document numbers on the IBM Fax system.
+
+        ValuePoint 325T                    11133
+        ValuePoint 425SX                   11134
+        ValuePoint 433DX                   11135
+        ValuePoint 466DX                   11136
+        ValuePoint 6312 Display            11137
+        ValuePoint 6314 Display            11138
+        ValuePoint 6319 Display            11139
+        ValuePoint Facts and Features      11142
+        ValuePoint Overview                11143
+        Installation Instructions for Windows 3.1 drivers    12578
+
+16.  DASD bay information...
+
+  2    3.5" slim high bays    (one of these is for the 1.44 floppy)
+  1    3.5" half high bay     (this bay is used by the hard drive)
+  2    5.25" half high bays
+
+Two of the 3.5" bays (1 slim high & 1 half high) are hidden, the rest are open.
+
+17.  You can hit the ESC key to stop the memory from counting during POST.
+
+18.  Several systems have been shipped without keys, need to order a new cover l
+ock assembly.
+
+19.  IRQ2 Interrupt Conflict
+
+    The video on the ValuePoints use IRQ2 by default.  Some
+    adapter cards such as Token- Ring adapters will conflict with the
+    ValuePoint if the card uses IRQ2.  There is a jumper on most systems
+    the will disable the video from using IRQ2 to free up the conflict.
+
+   W52 & Mxx models - Jumper labeled JP305
+   Fxx models - Jumper labeled JP17
+   Cxx models -Jumper labeled JP16    (The first Cxx models were not built
+                                with a JP16 jumper)
+
+20.  Warranty information...
+
+    1. The ValuePoint systems have a 1 year, On-Site warranty.  If a
+    customer wants to purchase any kind of extended warranty, they can
+    call the IBM Maintenance Department, 1-800- 624-6875.
+
+    2. If a dealer needs to use the 30-Day Money Back Guarantee, the
+    dealer needs to call 1-800-426-9733 to get the information and
+    paperwork for the return.
+
+21.  Where the serial number of the ValuePoint is located.
+
+    1.    Under the key lock on the metal casing.
+    2.    On the back of the unit.
+
+22.  Emulation cards with DOS and EMM386.EXE
+
+    If you use a memory manager program such as EMM386.EXE or
+    QEMM386.EXE, you need to exclude the emulation card's ROM address
+    and RAM address.  If you do not, some programs can load "on top of"
+    the emulation card, causing unusual errors or lock-ups.
+
+23.  Modem problems
+
+    Modems use COM ports and IRQs (interrupt levels).  The modem could
+    be conflicting with a serial port on the system board.  Change the
+    COM port and/or the IRQ level of the modem to so it is not
+    conflicting with the system.
+
+24. SCO-Unix has a patch to get the operating system to work on the ValuePoint.
+ Conact SCO-Unix.
+
+
+
+25.  There is no 'Turbo' button or hardware device to slow down the processor.
+
+    There is software programs available that will slow down the
+    processor, usually found on bulletin board systems.
+
+26.  The AutoCad drivers that come with the ValuePoint will work
+    with AutoCad Release 12.
+
+27.  The beeper on the ValuePoint is a Piezo beeper.
+
+28.  The ValuePoints that come with the STB card are only available
+    from DRM, 1-800-IBM-2YOU.
+
+29.  Token-Ring RIPL problem hint.
+
+    Try setting the Token-Ring card at an address higher than C800.
+
+30.  Configuration change in the 6384-F20 ValuePoint.
+
+    The F20 model used to come with an 80 Mb hard drive.  Now it comes
+    with a 120 Mb hard drive.  Dealer can return the 80 Mb version for
+    120 Mb by calling 1-800-426-9733.  This has to be done before
+    February 26, 1993.  You must ship all your returns in ONE shipment.
+
+31.  The ValuePoints systems and monitors are FCC Class 'B' certified.
+
+32.  If a ValuePoint does not work on a cold boot, and works on a
+    warm boot, check to see if DOS is IBM.
+
+    There have been numerous problems with MS-DOS on the ValuePoint.
+
+33.  If you are going to use a Token Ring II adapter and EMM386, put
+    a parameter D=100 in the config.sys.
+
+    The D=100 parameter allocates 100 kb of DMA buffer for the Token-Ring II ada
+pter.
+
+34.  If you are having 162 & 163 errors on ValuePoints with OS/2,
+    try the following steps...
+
+    1.Download CLOCK01.SYS from the BBS in Directory 36
+    2.Delete the CLOCK01.SYS from the OS2 directory on the ValuePoint
+      hard drive.
+    3.    Copy your new CLOCK01.SYS to the OS2 directory.
+    4.    Shutdown
+    5.    Cold boot the machine TWICE.
+
+35.  The mouse is a 200 D.P.I. (dots per inch) mouse.
+
+36.  Foxpro issues with the SLC processor (325T computer)
+
+    Foxpro 2.0 could hang on the SLC chip.  To get around this, try to
+    load Foxpro in expanded memory.  Foxpro 2.5 should work fine on the
+    SLC chip.
+
+37.  Lotus has a patch for 3.1 and 3.1+.  Contact Lotus for details.
+     IT STILL REQUIRES EMM386 FOR SOME REASON.
+
+
+
+
+
